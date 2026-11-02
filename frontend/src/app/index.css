@@ -1,0 +1,143 @@
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/600.css';
+@import '@xyflow/react/dist/style.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg-app: #0d1117;
+  --bg-panel: #161b22;
+  --bg-panel-header: #1c2128;
+  --bg-subtle: #21262d;
+  --border-color: #30363d;
+  --border-focus: #58a6ff;
+  --text-primary: #f0f6fc;
+  --text-secondary: #9ba5b0;
+  --text-muted: #7d8590;
+  --accent-primary: #238636;
+  --accent-primary-hover: #2ea043;
+  --accent-blue: #58a6ff;
+  --accent-purple: #bc8cff;
+  --accent-amber: #d29922;
+  --accent-red: #f85149;
+  --null-badge: #382319;
+  --null-text: #ffa657;
+  --blob-badge: #261a3b;
+  --blob-text: #d2a8ff;
+  --syn-keyword: #ff7b72;
+  --syn-string: #a5d6ff;
+  --syn-number: #79c0ff;
+  --syn-comment: #8b949e;
+  --syn-type: #ffa657;
+  --syn-ident: #e6edf3;
+  --selection: rgba(56, 139, 253, 0.3);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --bg-app: #f6f8fa;
+  --bg-panel: #ffffff;
+  --bg-panel-header: #f3f4f6;
+  --bg-subtle: #eaeef2;
+  --border-color: #d0d7de;
+  --border-focus: #0969da;
+  --text-primary: #1f2328;
+  --text-secondary: #4b5563;
+  --text-muted: #6e7781;
+  --accent-primary: #1f883d;
+  --accent-primary-hover: #1a7f37;
+  --accent-blue: #0969da;
+  --accent-purple: #8250df;
+  --accent-amber: #9a6700;
+  --accent-red: #cf222e;
+  --null-badge: #fff8c5;
+  --null-text: #9a6700;
+  --blob-badge: #fbefff;
+  --blob-text: #8250df;
+  --syn-keyword: #cf222e;
+  --syn-string: #0a3069;
+  --syn-number: #0550ae;
+  --syn-comment: #6e7781;
+  --syn-type: #953800;
+  --syn-ident: #1f2328;
+  --selection: rgba(9, 105, 218, 0.2);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-app font-sans text-sm text-fg antialiased;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+}
+
+.panel-title {
+  @apply font-mono text-[11px] font-semibold uppercase tracking-wider text-fg-2;
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+dialog::backdrop {
+  background: rgba(1, 4, 9, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+.react-flow {
+  --xy-background-color: var(--bg-app);
+  --xy-node-background-color: var(--bg-panel);
+  --xy-edge-stroke: var(--accent-blue);
+  --xy-controls-button-background-color: var(--bg-panel);
+  --xy-controls-button-color: var(--text-primary);
+  --xy-controls-button-border-color: var(--border-color);
+  --xy-controls-button-background-color-hover: var(--bg-subtle);
+}
+
+.react-flow__edge-textbg {
+  fill: var(--bg-panel);
+}
+
+.react-flow__edge-text {
+  fill: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}
+
+.animate-fade-in {
+  animation: fade-in 160ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

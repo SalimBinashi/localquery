@@ -1,0 +1,169 @@
+{
+  "project_title": "Local-First SQLite Playground",
+  "archetype": "Architectural / Tactical Developer IDE (Swiss & Dark-Mode-First High Density)",
+  "emotional_tone": "Precision, reliability, ultra-fast client-side execution, dense utility, developer-focused transparency",
+  "theme_strategy": {
+    "default_theme": "dark",
+    "theme_support": "Dark and light with interactive toggle",
+    "dark_tokens": {
+      "--bg-app": "#0D1117",
+      "--bg-panel": "#161B22",
+      "--bg-panel-header": "#1C2128",
+      "--bg-subtle": "#21262D",
+      "--border-color": "#30363D",
+      "--border-focus": "#58A6FF",
+      "--text-primary": "#F0F6FC",
+      "--text-secondary": "#8B949E",
+      "--text-muted": "#6E7681",
+      "--accent-primary": "#238636",
+      "--accent-primary-hover": "#2EA043",
+      "--accent-blue": "#58A6FF",
+      "--accent-purple": "#BC8CFF",
+      "--accent-amber": "#D29922",
+      "--accent-red": "#F85149",
+      "--null-badge": "#382319",
+      "--null-text": "#FFA657",
+      "--blob-badge": "#261A3B",
+      "--blob-text": "#D2A8FF"
+    },
+    "light_tokens": {
+      "--bg-app": "#F6F8FA",
+      "--bg-panel": "#FFFFFF",
+      "--bg-panel-header": "#F3F4F6",
+      "--bg-subtle": "#EAEFEF",
+      "--border-color": "#D0D7DE",
+      "--border-focus": "#0969DA",
+      "--text-primary": "#1F2328",
+      "--text-secondary": "#57609A",
+      "--text-muted": "#6E7781",
+      "--accent-primary": "#1F883D",
+      "--accent-primary-hover": "#1A7F37",
+      "--accent-blue": "#0969DA",
+      "--accent-purple": "#8250DF",
+      "--accent-amber": "#9A6700",
+      "--accent-red": "#CF222E",
+      "--null-badge": "#FFF8C5",
+      "--null-text": "#9A6700",
+      "--blob-badge": "#FBEFFF",
+      "--blob-text": "#8250DF"
+    }
+  },
+  "typography": {
+    "ui_font": "JetBrains Mono, Fira Code, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+    "headings": "JetBrains Mono, Consolas, monospace",
+    "code_editor": "JetBrains Mono, Fira Code, monospace",
+    "font_weights": {
+      "light": 300,
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "sizes": {
+      "app_header": "text-lg font-bold tracking-tight",
+      "panel_header": "text-xs font-semibold uppercase tracking-wider",
+      "code": "text-xs font-mono leading-relaxed",
+      "table_cell": "text-xs font-mono",
+      "badge": "text-[10px] font-mono uppercase font-bold"
+    }
+  },
+  "layout_architecture": {
+    "type": "Three-Pane Resizable IDE (Grid / Split view)",
+    "mobile_strategy": "Tabbed view on screens below 768px (DDL Editor | Query Console | Results & ERD)",
+    "desktop_structure": {
+      "header": "Fixed top bar h-12 flex items-center justify-between px-4 border-b z-50",
+      "body": "Flex 1 flex-col md:flex-row h-[calc(100vh-3rem)] overflow-hidden",
+      "left_pane": "DDL Schema Editor + Seed Config Generator + Summary Report (Width: 35-40%, resizable)",
+      "right_pane": "Split vertically into Upper-Right (Query Console) & Lower-Right (Tabbed Results / ERD / Execution Details)",
+      "upper_right_pane": "SQL Console with toolbar (Run, Clear, Examples, History) + CodeMirror (Height: ~45%)",
+      "lower_right_pane": "Tabs for Results, Schema/ERD (React Flow), Execution Details (Height: ~55%)"
+    }
+  },
+  "status_pill_states": {
+    "initializing": {
+      "label": "Initializing WASM...",
+      "color_bg": "bg-amber-500/15",
+      "color_text": "text-amber-400",
+      "border": "border-amber-500/30",
+      "dot": "bg-amber-400 animate-pulse"
+    },
+    "ready": {
+      "label": "Database Ready",
+      "color_bg": "bg-emerald-500/15",
+      "color_text": "text-emerald-400",
+      "border": "border-emerald-500/30",
+      "dot": "bg-emerald-400"
+    },
+    "executing": {
+      "label": "Executing Query...",
+      "color_bg": "bg-blue-500/15",
+      "color_text": "text-blue-400",
+      "border": "border-blue-500/30",
+      "dot": "bg-blue-400 animate-ping"
+    },
+    "error": {
+      "label": "DB Error",
+      "color_bg": "bg-red-500/15",
+      "color_text": "text-red-400",
+      "border": "border-red-500/30",
+      "dot": "bg-red-400"
+    },
+    "disposed": {
+      "label": "Disposed / Offline",
+      "color_bg": "bg-zinc-500/15",
+      "color_text": "text-zinc-400",
+      "border": "border-zinc-500/30",
+      "dot": "bg-zinc-400"
+    }
+  },
+  "components_specification": {
+    "Header": "Compact bar with App Title ('Local-First SQLite Playground'), Subtitle ('Client-side WASM IDE'), DB status pill, workspace status pill ('Unshared changes' / 'Synced'), action buttons: Share Workspace, Export .sqlite, Reset, Theme Toggle.",
+    "LeftPane_SchemaEditor": "CodeMirror SQL editor for DDL + Seed control panel (Rows: 10/50/100 toggle, Seed input for deterministic seed data, 'Interpret Schema & Generate Seed' button, Reset button) + Summary report card showing created tables, row count, foreign key relations.",
+    "UpperRightPane_QueryConsole": "CodeMirror SQL query editor + Action Toolbar: Run (Ctrl/Cmd+Enter), Clear, Example Queries Dropdown, Query History drawer/modal. Keyboard shortcut tooltips.",
+    "LowerRightPane_ResultsTab": "High-density data grid with sortable columns, pagination controls (10, 25, 50, 100 rows per page), copy to clipboard, CSV export, distinct visualization badges for NULL (amber/gold tag) and BLOB (purple binary hex badge), truncation notice when results > limit, timing & row metrics footer.",
+    "LowerRightPane_ERDTab": "Interactive React Flow diagram mapping schema tables as nodes with primary key (PK) / foreign key (FK) badges, column data types, connecting directional edges, pan/zoom controls, and color-coded legend.",
+    "LowerRightPane_ExecutionDetailsTab": "Structured query analysis tab showing parsing time, execution time, total latency, affected rows, query AST/structure summary, and detailed formatted error callouts if execution fails."
+  },
+  "data_testid_guidelines": {
+    "mandatory": "All interactive elements (buttons, inputs, tabs, selects, editor regions) must contain explicit data-testid attributes in kebab-case format.",
+    "key_ids": [
+      "data-testid='app-header'",
+      "data-testid='db-status-pill'",
+      "data-testid='workspace-status-pill'",
+      "data-testid='theme-toggle-button'",
+      "data-testid='share-workspace-button'",
+      "data-testid='export-db-button'",
+      "data-testid='reset-db-button'",
+      "data-testid='ddl-editor'",
+      "data-testid='seed-density-10'",
+      "data-testid='seed-density-50'",
+      "data-testid='seed-density-100'",
+      "data-testid='random-seed-input'",
+      "data-testid='generate-seed-button'",
+      "data-testid='reset-schema-button'",
+      "data-testid='query-editor'",
+      "data-testid='run-query-button'",
+      "data-testid='clear-query-button'",
+      "data-testid='example-queries-select'",
+      "data-testid='query-history-button'",
+      "data-testid='results-tab-button'",
+      "data-testid='erd-tab-button'",
+      "data-testid='execution-tab-button'",
+      "data-testid='results-grid'",
+      "data-testid='copy-results-button'",
+      "data-testid='export-csv-button'",
+      "data-testid='pagination-next'",
+      "data-testid='pagination-prev'"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Ensure 100% client-side functionality using sql.js Web Worker or in-browser WASM execution.",
+    "Support dark and light mode seamlessly using CSS root variables and Tailwind dark: classes.",
+    "Maintain high density, low padding (compact IDE look: p-2 to p-4, text-xs/text-sm font sizes, 1px subtle borders).",
+    "Never use raw transparent header backgrounds without backdrop blur or solid backgrounds.",
+    "Format NULL and BLOB table cells with distinct, readable badges.",
+    "Implement resizable panels (or smooth split flex layouts) with fallback to tabbed navigation on small screens.",
+    "Add keyboard shortcut binding (Ctrl+Enter / Cmd+Enter) to trigger SQL query execution.",
+    "Ensure all interactive elements have valid data-testid attributes."
+  ]
+}

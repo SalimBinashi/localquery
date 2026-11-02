@@ -1,0 +1,38 @@
+{
+  "summary": "Tested the frontend only (it's a client-side SQLite playground with no backend). Ran 10 Playwright sessions against the preview URL at desktop 1920, tablet 768 and mobile 390, covering every feature listed in the review request plus extra edge cases. All core flows passed: startup and auto-seeding, editing the schema, seed density and random seed, invalid DDL handling, the query console (Ctrl+Enter, NULL/int64/blob/real cells, syntax and FK errors, multi-statement runs, examples, history, clear), pagination and page size, copy, CSV export, the 12000-row truncation badge, ERD updates after CREATE/ALTER/DROP, execution metrics, sharing, restoring a link in a new context without running the query, malformed/truncated/unsupported-version links, reset, database export and import, the diverged-DB status and apply-confirm dialog, theme toggle and persistence, privacy dialog, and the mobile tabs. No console errors. Found one UI bug at 768px tablet width and a few small UX issues.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "QueryToolbar at 768px tablet width", "issue": "The query toolbar is wider than the query pane. The History button extends past the viewport (bbox x=711, width=92, right edge about 803px on a 768px screen). Clicking it scrolls the query pane sideways: the 'QUERY' label and the editor get cut off and an empty strip appears on the right. The schema pane's 'Interpret Schema & Generate Seed' button also goes about 3px past the pane's right edge. There is no page-level overflow, only overflow inside the panes.", "selector": "[data-testid=query-history-button]", "priority": "MEDIUM"},
+      {"component": "Workspace status pill after Reset", "issue": "Share the default workspace, then Reset. The URL hash is cleared, but the pill still says 'Link up to date' (data-status=shared). Cause: resetWorkspace / RESTORE_WORKSPACE never clears state.lastSharedHash, and the default state serializes to the same hash.", "selector": "[data-testid=workspace-status-pill]", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Notices", "issues": ["Error notices (for example 'invalid header' from a failed import, or 'Commit or roll back the open transaction before exporting') pile up and stay visible after a successful later action or a Reset. Reset should probably clear notices."]},
+      {"screen": "Schema error box", "issues": ["The message about the database being unchanged appears twice: 'The previous database was left unchanged.' (the hint) and 'The previous database (if any) is unchanged.' (the footer)."]},
+      {"screen": "Results with zero rows", "issues": ["SELECT ... WHERE 1=0 shows only results-zero-rows with no column headers. sql.js still returns the column names, so the headers could be shown."]},
+      {"screen": "ERD", "issues": ["Edge labels such as 'order_id → id · N:1' overlap the edges of table nodes and get clipped.", "fitView shrinks nodes until they are unreadable when there are many tables or on mobile, and the legend covers about 20% of the canvas on mobile.", "FTS3 shadow tables (docs_content, docs_segments, docs_segdir) are listed as regular tables and ERD nodes, which adds noise."]},
+      {"screen": "Run button tooltip", "issues": ["While hovering, the tooltip sits over the first line of the query editor and is clipped at the left edge of the pane."]},
+      {"screen": "Seed input", "issues": ["Out-of-range values (-5, 99999999999) silently revert to the previous value with no message. Clearing the field immediately sets it to 0."]},
+      {"screen": "Mobile/tablet header", "issues": ["The workspace-status-pill (diverged / schema edited / shared) is hidden below desktop width, so mobile users never see the 'DB changes not in link' warning."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix the horizontal overflow of the query toolbar / query pane at 768px (History button goes past the viewport and clicking it scrolls the pane). Let the toolbar wrap or collapse below about 900px.",
+    "Clear lastSharedHash in resetWorkspace / RESTORE_WORKSPACE so the status pill doesn't say 'Link up to date' after the hash is cleared.",
+    "Optional: clear stale error notices on Reset and after successful operations; remove the duplicate 'previous database unchanged' text in schema-error; show column headers for zero-row results; avoid ERD label overlap; show a compact status indicator on mobile."
+  ],
+  "critical_code_review_comments": [
+    "WorkspaceProvider.resetWorkspace: if c.resetDatabase() throws, there is no catch. The error escapes as an unhandled rejection and apply() never runs. Wrap it the same way withClient does.",
+    "useWorkspaceSyncStatus re-serializes the whole state (lz-string compression) on every state change while lastSharedHash is set. That is expensive during typing; memoize on schemaText/queryText/seedConfig.",
+    "Running a query on a link-restored workspace before applying the schema runs against an empty database ('no such table'). That fits the 'never auto-run' rule, but a hint like 'apply schema first' would help.",
+    "Running DDL while the ERD tab is open switches the inspector back to Results. Consider staying on the ERD when schemaChanged is true."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (no backend)", "frontend": "97% (about 70 checks: 1 medium bug at tablet width, 1 low-priority state bug, the rest cosmetic)"},
+  "seed_data_creation": "None. All data is in-browser and temporary.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Pure client-side app at the REACT_APP_BACKEND_URL root. Type into CodeMirror by clicking [data-testid=<id>-input], then Control+A, Delete, keyboard.insert_text. random-seed-input is type=number, so fill() rejects non-numeric text. Clipboard fails in headless; the 'failed' status is expected. Dialogs are native <dialog> elements that stay in the DOM, so check is_visible rather than count. Mobile tabs render only below md; the default mobile tab is Query. Verified: FK enforcement (category=constraint), cascade delete, BEGIN shows 'transaction open', export is blocked during a transaction, export keeps foreign_keys=1, import of an exported .sqlite works and a bad file is rejected, the seed report lists skip reasons for virtual tables, shadow tables, NOT NULL FK cycles and missing parents, plus CHECK rejections."
+}
